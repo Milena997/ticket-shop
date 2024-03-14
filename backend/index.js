@@ -9,6 +9,10 @@ const mongoString = process.env.DATABASE_URL
 mongoose.connect(mongoString);
 const database = mongoose.connection
 
+const eventRoutes = require('./route/eventRoutes');
+
+app.use(express.json());
+
 database.on('error', (error) => {
     console.log(error)
 })
@@ -26,7 +30,7 @@ app.listen(port, () => {
 });
 
 
-
+app.use(`${process.env.API_VERSION}event`, eventRoutes)
 
 
 
