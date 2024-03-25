@@ -65,3 +65,16 @@ router.post('/', async (req, res) => {
         res.status(400).json({message: error.message})
     }
 })
+
+//delete  Event
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const event = await eventModel.findByIdAndDelete(id);
+        res.send(event);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+});
