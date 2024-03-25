@@ -9,8 +9,10 @@ const mongoString = process.env.DATABASE_URL
 mongoose.connect(mongoString);
 const database = mongoose.connection
 
-const eventRoutes = require('./route/eventRoutes');
 const authRoutes = require('./route/authRoutes');
+const eventRoutes = require('./route/eventRoutes');
+const userRoutes = require('./route/userRoutes');
+
 
 
 app.use(express.json());
@@ -32,8 +34,10 @@ app.listen(port, () => {
 });
 
 
-app.use(`${process.env.API_VERSION}event`, eventRoutes)
 app.use(`${process.env.API_VERSION}`, authRoutes)
+app.use(`${process.env.API_VERSION}event`, eventRoutes)
+app.use(`${process.env.API_VERSION}user`, userRoutes)
+
 
 
 
