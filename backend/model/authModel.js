@@ -29,4 +29,4 @@ function validateUser(user) {
 
 
 module.exports.validate = validateUser
-module.exports = mongoose.model('User', dataSchema)
+module.exports = mongoose.model('Account', dataSchema)
