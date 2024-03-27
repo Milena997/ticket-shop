@@ -63,16 +63,17 @@ router.post('/', async (req, res) => {
         res.status(400).json({message: error.message})
     }
 })
+
 //delete  User
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
-  
+
     try {
-      const user = await userModel.findByIdAndDelete(id);
-      res.send(user);
+        const user = await userModel.findByIdAndDelete(id);
+        res.send(user);
     } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
+        console.error(error);
+        res.status(500).send(error);
     }
-  });
+});
   

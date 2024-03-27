@@ -3,11 +3,15 @@ const mongoose = require('mongoose');
 const dataSchema = new mongoose.Schema({
     userId: {
         required: true,
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+
     },
     eventId: {
         required: true,
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event'
+
     },
     reviewScore: {
         required: true,

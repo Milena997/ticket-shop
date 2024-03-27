@@ -12,6 +12,8 @@ const database = mongoose.connection
 const authRoutes = require('./route/authRoutes');
 const eventRoutes = require('./route/eventRoutes');
 const userRoutes = require('./route/userRoutes');
+const rateRoutes = require('./route/rateRoutes');
+
 
 
 
@@ -35,8 +37,10 @@ app.listen(port, () => {
 
 
 app.use(`${process.env.API_VERSION}`, authRoutes)
-app.use(`${process.env.API_VERSION}event`, eventRoutes)
-app.use(`${process.env.API_VERSION}user`, userRoutes)
+app.use(`${process.env.API_VERSION}events`, eventRoutes)
+app.use(`${process.env.API_VERSION}users`, userRoutes)
+app.use(`${process.env.API_VERSION}rates`, rateRoutes)
+
 
 
 
