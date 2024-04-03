@@ -13,6 +13,8 @@ const authRoutes = require('./route/authRoutes');
 const eventRoutes = require('./route/eventRoutes');
 const userRoutes = require('./route/userRoutes');
 const rateRoutes = require('./route/rateRoutes');
+const favoriteRoutes = require('./route/favoriteRoutes');
+
 
 
 
@@ -40,6 +42,8 @@ app.use(`${process.env.API_VERSION}`, authRoutes)
 app.use(`${process.env.API_VERSION}events`, eventRoutes)
 app.use(`${process.env.API_VERSION}users`, userRoutes)
 app.use(`${process.env.API_VERSION}rates`, rateRoutes)
+app.use(`${process.env.API_VERSION}favorite`, favoriteRoutes)
+
 
 
 

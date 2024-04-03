@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const dataSchema = new mongoose.Schema({
     userId: {
         required: true,
@@ -7,12 +6,11 @@ const dataSchema = new mongoose.Schema({
         ref: 'User'
 
     },
-    eventIdsList: {
-        required: true,
-        type: [mongoose.Schema.Types.ObjectId],
+    eventIdsList: [{
+        required: false,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'
-
-    }
+    }]
 })
 
 module.exports = mongoose.model('Favorite', dataSchema)
