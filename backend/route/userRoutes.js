@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router()
-
+const passport = require('passport');
 
 const userModel = require('../model/userModel');
 module.exports = router;
 
 //Get all Users
-router.get('/', async (req, res) => {
+router.get('/',  passport.authenticate('jwt', { session: false }), async (req, res) => {
     try{
         const data = await userModel.find();
         res.json(data)
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 })
 
 //Get User by ID 
-router.get('/:id', async (req, res) => {
+router.get('/:id',  passport.authenticate('jwt', { session: false }), async (req, res) => {
     try{
         const data = await userModel.findById(req.params.id);
         res.json(data)
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
 })
 
 //Update User by ID
-router.patch('/:id', async (req, res) => {
+router.patch('/:id',  passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
@@ -46,7 +46,7 @@ router.patch('/:id', async (req, res) => {
 })
 
 //Create new User
-router.post('/', async (req, res) => {
+router.post('/',  passport.authenticate('jwt', { session: false }), async (req, res) => {
     
     const data = new userModel({
         name: req.body.name,
@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
 })
 
 //delete  User
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',  passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { id } = req.params;
 
     try {

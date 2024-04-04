@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router()
+const passport = require('passport');
 
 
 const rateModel = require('../model/rateModel');
@@ -7,7 +8,7 @@ const rateModel = require('../model/rateModel');
 module.exports = router;
 
 //Get all Rates
-router.get('/', async (req, res) => {
+router.get('/', passport.authenticate('jwt', { session: false }),async (req, res) => {
     try{
         const data = await rateModel.find();
         res.json(data)
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
 })
 
 //Add rate   body: eventid, userid, score
-router.post('/', async (req, res) => {
+router.post('/',passport.authenticate('jwt', { session: false }), async (req, res) => {
 
     const data = new rateModel({
             eventId :req.body.eventId,
@@ -36,7 +37,7 @@ router.post('/', async (req, res) => {
 })
 
 //delete  Rate 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { id } = req.params;
 
 
@@ -50,7 +51,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 //Get averageScore rate score (:id eventId)
-router.get('/:eventId', async (req, res) => {
+router.get('/:eventId', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const eventId = req.params.eventId;
 
@@ -69,7 +70,7 @@ router.get('/:eventId', async (req, res) => {
 })
 
 //update rate 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;

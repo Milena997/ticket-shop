@@ -1,13 +1,20 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const passport = require('passport');
 require('dotenv').config();
+require('./passport-config')(passport);
+
 const port = 3001;
 
 
 const mongoString = process.env.DATABASE_URL
 mongoose.connect(mongoString);
 const database = mongoose.connection
+
+
+// Initialize Passport
+ app.use(passport.initialize()); 
 
 const authRoutes = require('./route/authRoutes');
 const eventRoutes = require('./route/eventRoutes');
@@ -38,6 +45,7 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
 
 
 app.use(`${process.env.API_VERSION}`, authRoutes)

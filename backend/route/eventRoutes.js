@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router()
+const passport = require('passport');
 
 
 const eventModel = require('../model/eventModel');
 module.exports = router;
 
+
 //Get all Events
-router.get('/', async (req, res) => {
+router.get('/',passport.authenticate('jwt', { session: false }), async (req, res) => {
     try{
         const data = await eventModel.find();
         res.json(data)
@@ -17,7 +19,7 @@ router.get('/', async (req, res) => {
 })
 
 //Get Event by ID 
-router.get('/:id', async (req, res) => {
+router.get('/:id',passport.authenticate('jwt', { session: false }), async (req, res) => {
     try{
         const data = await eventModel.findById(req.params.id);
         res.json(data)
@@ -28,7 +30,7 @@ router.get('/:id', async (req, res) => {
 })
 
 //Update Event by ID
-router.patch('/:id', async (req, res) => {
+router.patch('/:id',passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
@@ -46,7 +48,7 @@ router.patch('/:id', async (req, res) => {
 })
 
 //Create new Event
-router.post('/', async (req, res) => {
+router.post('/',passport.authenticate('jwt', { session: false }), async (req, res) => {
     
     const data = new eventModel({
         eventName: req.body.eventName,
@@ -67,7 +69,7 @@ router.post('/', async (req, res) => {
 })
 
 //delete  Event
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { id } = req.params;
 
     try {

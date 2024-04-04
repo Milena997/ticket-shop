@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router()
+const passport = require('passport');
+
 
 
 const favoriteModel = require('../model/favoriteModel');
@@ -9,7 +11,7 @@ const eventModel = require('../model/eventModel');
 module.exports = router;
 
 //Get all favorites events for person
-router.get('/:id', async (req, res) => {
+router.get('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { id } = req.params;
 
     try{
@@ -22,7 +24,7 @@ router.get('/:id', async (req, res) => {
 })
 
 //Add rfavorite
-router.post('/:id', async (req, res) => {
+router.post('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { id } = req.params;
     const user = await favoriteModel.findOne({ userId: id });
    
@@ -56,7 +58,7 @@ router.post('/:id', async (req, res) => {
 })
 
 //delete  Rate 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { id } = req.params;
 
     const user = await favoriteModel.findOne({ userId: id });
