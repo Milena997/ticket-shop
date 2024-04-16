@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const passport = require('passport');
 require('dotenv').config();
+require('./passport-config')(passport);
+
 const port = 3001;
 
 
@@ -9,7 +12,21 @@ const mongoString = process.env.DATABASE_URL
 mongoose.connect(mongoString);
 const database = mongoose.connection
 
+
+// Initialize Passport
+ app.use(passport.initialize()); 
+
+const authRoutes = require('./route/authRoutes');
 const eventRoutes = require('./route/eventRoutes');
+const userRoutes = require('./route/userRoutes');
+const rateRoutes = require('./route/rateRoutes');
+const favoriteRoutes = require('./route/favoriteRoutes');
+const weatherRoutes = require('./route/weatherRoutes');
+
+
+
+
+
 
 app.use(express.json());
 
@@ -30,7 +47,18 @@ app.listen(port, () => {
 });
 
 
-app.use(`${process.env.API_VERSION}event`, eventRoutes)
+
+app.use(`${process.env.API_VERSION}`, authRoutes)
+app.use(`${process.env.API_VERSION}events`, eventRoutes)
+app.use(`${process.env.API_VERSION}users`, userRoutes)
+app.use(`${process.env.API_VERSION}rates`, rateRoutes)
+app.use(`${process.env.API_VERSION}favorite`, favoriteRoutes)
+app.use(`${process.env.API_VERSION}weather`, weatherRoutes)
+
+
+
+
+
 
 
 
