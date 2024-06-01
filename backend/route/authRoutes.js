@@ -9,11 +9,6 @@ const crypto = require('crypto');
 // another name for router in each routes file?
 module.exports = router;
 
-//milena123
-//m123@gmail.com
-//milena
-
-
 //register method 
 router.post('/register', async (req, res) => {
     const { error } = authModel.validate(req.body)
@@ -26,6 +21,7 @@ router.post('/register', async (req, res) => {
         username: req.body.username,
         password: hashPassword,
         email: req.body.email,
+        
 
     })
     let user = await authModel.findOne({ email: req.body.email })
@@ -33,6 +29,7 @@ router.post('/register', async (req, res) => {
         return res.status(400).send('User already exisits. Please sign in')
     } else {
         try {
+         
             const dataToSave = await data.save();
             res.status(200).json(dataToSave)
         }
@@ -63,7 +60,7 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: user._id },  process.env.JWT_SECRET, { expiresIn: '1h', });
             
 
-        res.status(200).json({ message: "Logged in successfully", token, refreshToken });
+        res.status(200).json({ message: "Logged in successfully", token, refreshToken, user });
 
     }
     catch (error) {
@@ -91,6 +88,7 @@ router.post("/token", passport.authenticate('jwt', { session: false }), async(re
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
           );
+          
 
         res.status(200).json({ message: "New refresh token ", refreshToken:  refreshTokenNew,  token: newToken });
     }

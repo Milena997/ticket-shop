@@ -25,10 +25,11 @@ const weatherRoutes = require('./route/weatherRoutes');
 
 
 
+const cors = require('cors');
 
-
-
+app.use(cors());
 app.use(express.json());
+
 
 database.on('error', (error) => {
     console.log(error)

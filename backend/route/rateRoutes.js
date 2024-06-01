@@ -17,19 +17,38 @@ router.get('/', passport.authenticate('jwt', { session: false }),async (req, res
         res.status(500).json({message: error.message})
     }
 })
+router.get('/rate',  passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const userId = req.query.userId;
+    const eventId = req.query.eventId;
+    console.log(req.query);
+    console.log(userId,eventId);
+
+    try{
+        const data = await rateModel.findOne({userId: userId, eventId: eventId });
+        console.log(data);
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 
 //Add rate   body: eventid, userid, score
 router.post('/',passport.authenticate('jwt', { session: false }), async (req, res) => {
-
-    const data = new rateModel({
-            eventId :req.body.eventId,
-            userId : req.body.userId,
-            reviewScore : req.body.reviewScore
-    })
+    const eventId =req.body.eventId;   
 
     try{
-        const dataToSave = await data.save();
-        res.status(200).json(dataToSave)
+    const dataToSave = await rateModel.findOneAndUpdate({eventId: req.body.eventId, userId:  req.body.userId}, {reviewScore : req.body.reviewScore}, {upsert: true, new: true})
+
+        const result = await  rateModel.find()
+        const eventRatingList = result.filter( rate => rate.eventId.toString() === eventId)
+
+        const totalScore = eventRatingList.reduce((total, obj) => total + obj.reviewScore, 0);
+
+       const averageScore = totalScore / eventRatingList.length;
+
+
+        res.status(200).json({...dataToSave, averageScore: averageScore})
     }
     catch(error){
         res.status(400).json({message: error.message})
@@ -56,7 +75,7 @@ router.get('/:eventId', passport.authenticate('jwt', { session: false }), async 
         const eventId = req.params.eventId;
 
         const result = await  rateModel.find()
-        const eventRatingList = result.filter( rate => rate.eventId === eventId)
+        const eventRatingList = result.filter( rate => rate.eventId.toString() === eventId)
 
         const totalScore = eventRatingList.reduce((total, obj) => total + obj.reviewScore, 0);
 

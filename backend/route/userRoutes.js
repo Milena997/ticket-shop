@@ -18,8 +18,9 @@ router.get('/',  passport.authenticate('jwt', { session: false }), async (req, r
 
 //Get User by ID 
 router.get('/:id',  passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const accountId = req.params.id;
     try{
-        const data = await userModel.findById(req.params.id);
+        const data = await userModel.findOne({accountId: accountId});
         res.json(data)
     }
     catch(error){
@@ -46,13 +47,15 @@ router.patch('/:id',  passport.authenticate('jwt', { session: false }), async (r
 })
 
 //Create new User
-router.post('/',  passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/:id',  passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const accountId = req.params.id;
     
     const data = new userModel({
         name: req.body.name,
         lastName: req.body.lastName,
         dateOfBirth: new Date(req.body.dateOfBirth).toString(),
         location: req.body.location,
+        accountId: accountId
     })
 
     try {
