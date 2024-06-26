@@ -20,9 +20,10 @@ function App() {
           postData('token', {refreshToken: refreshToken}).then((res) =>{ 
             
             console.log(res);
-            
-            localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken))
-            localStorage.setItem('token', JSON.stringify(res.token))
+            if(!res === null) {
+              localStorage.setItem('refreshToken', JSON.stringify(res.refreshToken))
+              localStorage.setItem('token', JSON.stringify(res.token))
+            }
           })
             
   

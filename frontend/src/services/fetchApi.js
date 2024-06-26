@@ -23,16 +23,20 @@ const useFetchAPI = () => {
     }
     setIsLoading(true);
     try {
-      const headers = {
+      
+      const headers = { 
         'Content-Type': 'application/json',
       };
+      const headersForFormData = {
+        'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      }
 
           headers['Authorization'] = `Bearer ${JSON.parse(localStorage.getItem('token'))}`;
 
       const options = {
         method,
-        headers,
-        body: data ? JSON.stringify(data) : null,
+        headers: (data instanceof FormData) ? headersForFormData : headers,
+        body: data ? (data instanceof FormData ? data : JSON.stringify(data) ): null,
       };
 
       const res = await fetch(url, options);
@@ -44,8 +48,8 @@ const useFetchAPI = () => {
       if( error.toString().includes('Unauthorized')) {
 
         localStorage.clear();
-        navigate('/login')
-        return;
+        navigate('/login');
+        return null;
       }
       
       setError(error);
@@ -57,6 +61,18 @@ const useFetchAPI = () => {
    return  await fetchData(`${baseUrl}${url}`, 'POST', data);
   };
 
+  const postDataFetchApi = async (url, data) => {
+    let formData = new FormData();
+
+    formData.append('eventName', data.eventName)
+    formData.append('eventDate', data.eventDate)
+    formData.append('eventDescription', data.eventDescription)
+    formData.append('eventLocation', data.eventLocation)
+    formData.append('file', data.file)
+    formData.append('test', 'test')
+
+    return  await fetchData(`${baseUrl}${url}`, 'POST', formData);
+   };
   const getData = async (url) => {
     return await fetchData(`${baseUrl}${url}`, 'GET');
   };
@@ -69,7 +85,7 @@ const useFetchAPI = () => {
     return await fetchData(`${baseUrl}${url}`, 'DELETE');
   };
 
-  return { response, error, isLoading, postData, getData, patchData, deleteData };
+  return { response, error, isLoading, postData, getData, patchData, deleteData, postDataFetchApi };
 };
 
 export default useFetchAPI;
