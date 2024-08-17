@@ -40,18 +40,14 @@ var storage = new GridFsStorage({
 const upload = multer({ storage });
 
 //Get all Events
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      const data = await eventModel.find();
-      res.json(data);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+router.get("/", async (req, res) => {
+  try {
+    const data = await eventModel.find();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-);
+});
 
 //Get Event by ID
 router.get(

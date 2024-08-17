@@ -9,6 +9,7 @@ import MainScreen from "../components/MainScreen";
 const Dashboard = () => {
   const navigate = useNavigate();
   const account = useSelector((state) => state.account.account);
+  const userType = JSON.parse(localStorage.getItem("userType"));
 
   const { getData } = useFetchAPI();
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const Dashboard = () => {
         localStorage.hasOwnProperty("refreshToken")
       )
     ) {
-      navigate("/login");
+      // navigate("/login");
     }
 
     if (localStorage.hasOwnProperty("token")) {
@@ -31,8 +32,8 @@ const Dashboard = () => {
 
   return (
     <div className="h-full">
-      <Header />
-      <MainScreen />
+      <Header userType={userType} />
+      <MainScreen userType={userType} />
     </div>
   );
 };

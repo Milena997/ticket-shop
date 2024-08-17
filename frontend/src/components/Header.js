@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Logout from "./Logout";
 
-const Header = () => {
+const Header = ({ userType }) => {
   const user = useSelector((state) => state.user.user);
 
   return (
@@ -13,7 +13,7 @@ const Header = () => {
         </div>
         <div className=" text-white">{user?.location}</div>
       </div>
-      <Logout />
+      <Logout userType={userType} />
     </div>
   );
 };

@@ -7,15 +7,13 @@ import AddEvent from "./AddEvent";
 import AddEventModal from "../modals/AddEventModal";
 import RateModal from "../modals/RateModal";
 
-const MainScreen = () => {
+const MainScreen = ({ userType }) => {
   const { getData } = useFetchAPI();
   const dispatch = useDispatch();
-
   const eventList = useSelector((state) => state.events.eventList);
 
   const [list, setList] = useState(eventList);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
   const getAllEvens = () => {
     getData(`events`).then((res) => {
       dispatch(setEventsList(res));
@@ -30,12 +28,20 @@ const MainScreen = () => {
 
   return (
     <div className="bg-opacity-60  p-5 h-full">
-      <AddEvent onClick={() => setIsAddModalOpen(true)} />
-
+      {userType == "admin" && (
+        <AddEvent onClick={() => setIsAddModalOpen(true)} />
+      )}
       {eventList.length ? (
         <div className="flex flex-col items-center gap-5 h-full pb-5">
           {eventList.map((item) => {
-            return <EventCard key={item._id} event={item} rate={0} />;
+            return (
+              <EventCard
+                key={item._id}
+                event={item}
+                rate={0}
+                userType={userType}
+              />
+            );
           })}
         </div>
       ) : (

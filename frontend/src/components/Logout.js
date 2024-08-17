@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import useFetchAPI from "../services/fetchApi";
 
-const Logout = () => {
+const Logout = ({ userType }) => {
   const { postData } = useFetchAPI();
   const navigate = useNavigate();
   const handleLogout = () => {
+    if (!userType) {
+      navigate("/login");
+      return;
+    }
     try {
       const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
       postData("logout", { refreshToken: refreshToken }).then(() => {
@@ -15,14 +19,13 @@ const Logout = () => {
       console.log(error);
     }
   };
-
   return (
     <div>
       <button
         className="text-white bg-[#232323] px-14 py-3 rounded hover:bg-black hover:!text-white"
         onClick={handleLogout}
       >
-        Logout
+        {!userType ? "Login" : "Logout"}
       </button>
     </div>
   );

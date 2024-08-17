@@ -28,16 +28,19 @@ const Login = () => {
       postData("login", user).then((res) => {
         const token = JSON.stringify(res.token);
         const userId = JSON.stringify(res.user._id);
+        const userType = JSON.stringify(res.user.userType);
 
         localStorage.setItem("userId", userId);
         localStorage.setItem("token", token);
         const refreshToken = JSON.stringify(res.refreshToken);
         localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("userType", userType);
         dispatch(
           setAccount({
             username: res.user.username,
             email: res.user.email,
             userId: res.user._id,
+            userType: userType,
           })
         );
 

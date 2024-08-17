@@ -36,6 +36,7 @@ const EventCard = (event) => {
     });
   }, []);
   const openRateModal = () => {
+    if (!event.userType) return;
     getData(`rates/rate?userId=${user._id}&eventId=${event.event._id}`).then(
       (res) => {
         if (res) {
@@ -53,6 +54,10 @@ const EventCard = (event) => {
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
   };
+  const showEventDetails = () => {
+    if (!event.userType) return;
+    setIsEventDetailsModalOpen(true);
+  };
   return (
     <div
       className="relative overflow-hidden rounded-md !bg-contain !bg-center h-[400px] w-[500px] !bg-no-repeat p-12 text-center border shadow-md  shadow-gray-500 z-[5] "
@@ -69,15 +74,21 @@ const EventCard = (event) => {
           <div className="flex-auto ">
             <div className="flex justify-between">
               <div
-                onClick={() => setIsEventDetailsModalOpen(true)}
-                className="cursor-pointer font-bold text-2xl text-[#fff] hover:text-blue-400"
+                onClick={showEventDetails}
+                className={`${
+                  event.userType && "cursor-pointer"
+                } font-bold text-2xl text-[#fff] ${
+                  event.userType && "hover:text-blue-400"
+                } `}
               >
                 {" "}
                 {event.event.eventName}
               </div>
               <svg
                 onClick={() => openDeleteModal()}
-                className="cursor-pointer"
+                className={`cursor-pointer ${
+                  event.userType === "admin" ? "visible" : "invisible"
+                } `}
                 xmlns="http://www.w3.org/2000/svg"
                 x="0px"
                 y="0px"
@@ -133,7 +144,7 @@ const EventCard = (event) => {
                 fill="currentColor"
                 className={`w-6 h-6 ${
                   rate === 0 ? "text-gray-400" : "text-yellow-500"
-                } cursor-pointer`}
+                } ${event.userType && "cursor-pointer"} `}
               >
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77 6.82 21l1.18-6.86-5-4.87 6.91-1.01L12 2z" />
               </svg>

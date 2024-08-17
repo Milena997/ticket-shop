@@ -1,28 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const accountSlice = createSlice({
-  name: 'account',
+  name: "account",
   initialState: {
     account: {
-        email: '',
-        username: '',
-        userId: localStorage.hasOwnProperty('userId') ? JSON.parse(localStorage.getItem('userId')) : '',
-    }
+      email: "",
+      username: "",
+      userId: localStorage.hasOwnProperty("userId")
+        ? JSON.parse(localStorage.getItem("userId"))
+        : "",
+      userType: "",
+    },
   },
   reducers: {
     setUsername: (state, action) => {
-      state.account.username = action.payload
+      state.account.username = action.payload;
     },
     setEmail: (state, action) => {
-        state.account.email = action.payload
+      state.account.email = action.payload;
     },
     setAccount: (state, action) => {
-        state.account = action.payload
-    }
+      state.account = action.payload;
+    },
   },
-})
+});
 
+export const { setUsername, setEmail, setAccount } = accountSlice.actions;
 
-export const { setUsername, setEmail, setAccount } = accountSlice.actions
-
-export default accountSlice.reducer
+export default accountSlice.reducer;

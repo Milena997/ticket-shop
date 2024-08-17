@@ -1,107 +1,138 @@
-const express = require('express');
-const router = express.Router()
-const passport = require('passport');
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
 
-
-const rateModel = require('../model/rateModel');
+const rateModel = require("../model/rateModel");
 
 module.exports = router;
 
 //Get all Rates
-router.get('/', passport.authenticate('jwt', { session: false }),async (req, res) => {
-    try{
-        const data = await rateModel.find();
-        res.json(data)
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const data = await rateModel.find();
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-router.get('/rate',  passport.authenticate('jwt', { session: false }), async (req, res) => {
+  }
+);
+router.get(
+  "/rate",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     const userId = req.query.userId;
     const eventId = req.query.eventId;
     console.log(req.query);
-    console.log(userId,eventId);
+    console.log(userId, eventId);
 
-    try{
-        const data = await rateModel.findOne({userId: userId, eventId: eventId });
-        console.log(data);
-        res.json(data)
+    try {
+      const data = await rateModel.findOne({
+        userId: userId,
+        eventId: eventId,
+      });
+      console.log(data);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
+  }
+);
 
 //Add rate   body: eventid, userid, score
-router.post('/',passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const eventId =req.body.eventId;   
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const eventId = req.body.eventId;
 
-    try{
-    const dataToSave = await rateModel.findOneAndUpdate({eventId: req.body.eventId, userId:  req.body.userId}, {reviewScore : req.body.reviewScore}, {upsert: true, new: true})
+    try {
+      const dataToSave = await rateModel.findOneAndUpdate(
+        { eventId: req.body.eventId, userId: req.body.userId },
+        { reviewScore: req.body.reviewScore },
+        { upsert: true, new: true }
+      );
 
-        const result = await  rateModel.find()
-        const eventRatingList = result.filter( rate => rate.eventId.toString() === eventId)
+      const result = await rateModel.find();
+      const eventRatingList = result.filter(
+        (rate) => rate.eventId.toString() === eventId
+      );
 
-        const totalScore = eventRatingList.reduce((total, obj) => total + obj.reviewScore, 0);
+      const totalScore = eventRatingList.reduce(
+        (total, obj) => total + obj.reviewScore,
+        0
+      );
 
-       const averageScore = totalScore / eventRatingList.length;
+      const averageScore = totalScore / eventRatingList.length;
 
-
-        res.status(200).json({...dataToSave, averageScore: averageScore})
+      res.status(200).json({ ...dataToSave, averageScore: averageScore });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
     }
-    catch(error){
-        res.status(400).json({message: error.message})
-    }
-})
+  }
+);
 
-//delete  Rate 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+//delete  Rate
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     const { id } = req.params;
 
-
     try {
-        const rate = await rateModel.findByIdAndDelete(id);
-        res.send(rate);
+      const rate = await rateModel.findByIdAndDelete(id);
+      res.send(rate);
     } catch (error) {
-        console.error(error);
-        res.status(500).send(error);
+      console.error(error);
+      res.status(500).send(error);
     }
-});
+  }
+);
 
 //Get averageScore rate score (:id eventId)
-router.get('/:eventId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get("/:eventId", async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+
+    const result = await rateModel.find();
+    const eventRatingList = result.filter(
+      (rate) => rate.eventId.toString() === eventId
+    );
+
+    const totalScore = eventRatingList.reduce(
+      (total, obj) => total + obj.reviewScore,
+      0
+    );
+
+    const averageScore = totalScore / eventRatingList.length;
+
+    res.send({ averageScore: averageScore });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+//update rate
+router.patch(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     try {
-        const eventId = req.params.eventId;
+      const id = req.params.id;
+      const updatedData = req.body;
+      const options = { new: true };
 
-        const result = await  rateModel.find()
-        const eventRatingList = result.filter( rate => rate.eventId.toString() === eventId)
+      const result = await rateModel.findByIdAndUpdate(
+        id,
+        updatedData,
+        options
+      );
 
-        const totalScore = eventRatingList.reduce((total, obj) => total + obj.reviewScore, 0);
-
-       const averageScore = totalScore / eventRatingList.length;
-
-        res.send({averageScore: averageScore})
+      res.send(result);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
     }
-    catch (error) {
-        res.status(400).json({ message: error.message })
-    }
-})
-
-//update rate 
-router.patch('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    try {
-        const id = req.params.id;
-        const updatedData = req.body;
-        const options = { new: true };
-
-        const result = await rateModel.findByIdAndUpdate(
-            id, updatedData, options
-        )
-
-        res.send(result)
-    }
-    catch (error) {
-        res.status(400).json({ message: error.message })
-    }
-})
+  }
+);
