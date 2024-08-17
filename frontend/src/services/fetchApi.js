@@ -50,7 +50,7 @@ const useFetchAPI = () => {
     } catch (error) {
       if (error.toString().includes("Unauthorized")) {
         localStorage.clear();
-        // navigate('/login');
+        navigate("/login");
         return null;
       }
 

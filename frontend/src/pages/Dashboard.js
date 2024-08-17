@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import MainScreen from "../components/MainScreen";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const account = useSelector((state) => state.account.account);
   const userType = JSON.parse(localStorage.getItem("userType"));
 

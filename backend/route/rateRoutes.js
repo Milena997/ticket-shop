@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 
 const rateModel = require("../model/rateModel");
+const checkScopes = require("./utility");
 
 module.exports = router;
 
@@ -10,6 +11,7 @@ module.exports = router;
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin", "user"]),
   async (req, res) => {
     try {
       const data = await rateModel.find();
@@ -22,11 +24,10 @@ router.get(
 router.get(
   "/rate",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin", "user"]),
   async (req, res) => {
     const userId = req.query.userId;
     const eventId = req.query.eventId;
-    console.log(req.query);
-    console.log(userId, eventId);
 
     try {
       const data = await rateModel.findOne({
@@ -45,6 +46,7 @@ router.get(
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin", "user"]),
   async (req, res) => {
     const eventId = req.body.eventId;
 
@@ -78,6 +80,7 @@ router.post(
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin", "user"]),
   async (req, res) => {
     const { id } = req.params;
 
@@ -118,6 +121,7 @@ router.get("/:eventId", async (req, res) => {
 router.patch(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin", "user"]),
   async (req, res) => {
     try {
       const id = req.params.id;

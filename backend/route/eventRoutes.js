@@ -8,6 +8,7 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const fs = require("fs");
 const MongoClient = require("mongodb").MongoClient;
 const GridFSBucket = require("mongodb").GridFSBucket;
+const checkScopes = require("./utility");
 
 module.exports = router;
 
@@ -53,6 +54,7 @@ router.get("/", async (req, res) => {
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin", "user"]),
   async (req, res) => {
     try {
       const data = await eventModel.findById(req.params.id);
@@ -67,6 +69,7 @@ router.get(
 router.patch(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin"]),
   async (req, res) => {
     try {
       const id = req.params.id;
@@ -112,6 +115,7 @@ router.post(
   "/",
   upload.single("file"),
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin"]),
   async (req, res) => {
     const data = new eventModel({
       eventName: req.body.eventName,
@@ -157,10 +161,12 @@ router.get("/image/:id", async (req, res) => {
   }
 });
 
+// const checkScopes = requiredScopes("admin");
 //delete  Event
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkScopes.checkScopes(["admin"]),
   async (req, res) => {
     const { id } = req.params;
 
