@@ -20,6 +20,7 @@ const RateModal = ({
   isOpen,
   onClose,
   eventId,
+  eventName,
   updateRateOnCard,
   previousRate,
 }) => {
@@ -54,9 +55,9 @@ const RateModal = ({
   };
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-1">
       <div className="bg-white rounded-lg p-6 w-96">
-        <h2 className="text-2xl mb-4 text-[#000]">Rate Us</h2>
+        <h2 className="text-2xl mb-4 text-[#000]">Rate the show {eventName}</h2>
         <div className="flex justify-center mb-4">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star

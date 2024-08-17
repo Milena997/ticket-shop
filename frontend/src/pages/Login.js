@@ -26,12 +26,10 @@ const Login = () => {
       };
 
       postData("login", user).then((res) => {
-        console.log("res:", res);
         const token = JSON.stringify(res.token);
         const userId = JSON.stringify(res.user._id);
 
         localStorage.setItem("userId", userId);
-        console.log("token:", token);
         localStorage.setItem("token", token);
         const refreshToken = JSON.stringify(res.refreshToken);
         localStorage.setItem("refreshToken", refreshToken);

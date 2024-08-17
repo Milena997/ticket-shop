@@ -49,7 +49,7 @@ const AddEventModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
   return (
     <React.Fragment>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center min-w-[500px] z-40">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center min-w-[500px] z-10">
         <div className="bg-white rounded-lg p-6 w-96 min-w-[700px]">
           <div className="flex justify-between pb-6">
             <h1 className="text-2xl  text-center">Create new event </h1>

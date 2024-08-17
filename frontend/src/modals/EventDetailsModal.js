@@ -1,7 +1,7 @@
 const EventDetailsModal = ({ isOpen, onClose, event, rate }) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center min-w-[500px] h-full">
+    <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center min-w-[500px] h-full z-10">
       <div className="bg-white rounded-lg p-6 w-96 min-w-[700px]">
         <div className="flex justify-between pb-6">
           <div className="">
@@ -19,7 +19,7 @@ const EventDetailsModal = ({ isOpen, onClose, event, rate }) => {
                 fill="currentColor"
                 className={`w-6 h-6 text-yellow-500`}
               >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77 6.82 21l1.18-6.86-5-4.87 6.91-1.01L12 2z" />
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77 6.82 21l1.18-6.86-5-4.87 6.91-1.01L12" />
               </svg>
               {rate}
             </div>
@@ -69,7 +69,7 @@ const EventDetailsModal = ({ isOpen, onClose, event, rate }) => {
                 style={{
                   background: `url('http://localhost:3001/api/v1/events/image/${event.eventImage}')`,
                 }}
-                className="w-80 h-72 shadow-md shadow-gray-500 bg-center"
+                className="w-80 h-72 shadow-md shadow-gray-500 bg-center bg-contain bg-no-repeat"
               ></div>
             </div>
           )}

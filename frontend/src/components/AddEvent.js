@@ -7,11 +7,9 @@ import DeleteEventModal from "../modals/DeleteEventModal";
 
 const AddEvent = ({ onClick }) => {
   return (
-    <div className="flex justify-end pb-10" onClick={onClick}>
+    <div className="flex justify-end pb-10">
       <button
-        onClick={() => {
-          console.log("tra");
-        }}
+        onClick={onClick}
         className="px-8 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
       >
         + Add Event
